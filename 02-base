@@ -234,6 +234,8 @@ if [ ! -e $LFS/proc/self/mounts ]; then
 	createdir
 fi
 
+mkdir -p $LFS/var/lib/scratchpkg/index $LFS/var/cache/scratchpkg/{packages,sources}
+
 runinchroot scratch sync || abort 1
 
 for i in ${PKG[@]}; do
@@ -247,8 +249,9 @@ for i in ${PKG[@]}; do
 				ln -sfv /tools/lib/gcc $LFS/usr/lib || abort 1
 				runinchroot scratch build $i || abort 1
 				runinchroot scratch install -d --no-confirm $i || abort 1
-				echo "#!/bin/bash
-echo Adjustingtoolchain
+				cat > $LFS/tmp/adjusttoolchain << "EOF"
+#!/bin/bash
+echo "Adjusting toolchain"
 mv -v /tools/bin/{ld,ld-old}
 mv -v /tools/$(uname -m)-pc-linux-gnu/bin/{ld,ld-old}
 mv -v /tools/bin/{ld-new,ld}
@@ -270,9 +273,10 @@ grep "/lib.*/libc.so.6 " dummy.log
 grep found dummy.log
 rm -v dummy.c a.out dummy.log
 sleep 5
-" > $LFS/tmp/adjusttoolchain || abort 1
+EOF
 				chmod +x $LFS/tmp/adjusttoolchain || abort 1
 				runinchroot /tmp/adjusttoolchain || abort 1
+				rm $LFS/tmp/adjusttoolchain || abort 1
 				rm $LFS/usr/lib/gcc || abort 1
 				;;
 			bc)
@@ -305,7 +309,6 @@ sleep 5
 				;;
 		esac
 		echo ":: $i installed"
-		read
 	fi
 done
 
