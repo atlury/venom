@@ -9,10 +9,10 @@ TMP=${TMP:-/tmp/build}
 LOG=${LOG:-$(dirname $0)/log}
 SRC=${SRC:-$(dirname $0)/src}
 
-NAME=make
-VERSION=${MAKE_VER}
+NAME=httpup
+VERSION=${HTTPUP_VER}
 
-fetch "http://ftp.gnu.org/gnu/make/make-$MAKE_VER.tar.bz2" $SRC
+fetch "https://crux.nu/files/$NAME-$VERSION.tar.xz" $SRC
 
 [ "$1" = "fetch" ] && exit 0
 
@@ -26,12 +26,9 @@ tar xf $SRC/$tarballname -C $TMP
 
 	cd $TMP/$NAME-$VERSION
 
-	#work around an error caused by glibc-2.27 and later
-	sed -i '211,217 d; 219,229 d; 232 d' glob/glob.c
-	
-	./configure --prefix=/tools --without-guile
+	sed -i 's/Updating collection/Updating repository/' httpup.cpp
 	make
-	make install
+	make prefix=/tools mandir=/tools/share/man install
 	
 	}
 } 2>&1 | tee $LOG/$filename.log

@@ -30,7 +30,8 @@ tar xf $SRC/$tarballname -C $TMP
                 --with-ssl=openssl \
                 --without-libidn   \
                 --without-libpsl   \
-                --without-metalink
+                --without-metalink \
+				--disable-pcre2
 	make
 	make install
 	

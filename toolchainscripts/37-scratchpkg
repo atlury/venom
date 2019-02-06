@@ -1,0 +1,45 @@
+#!/bin/bash -e
+
+source $(dirname $0)/functions
+source $(dirname $0)/pkgversion
+
+filename=$(echo $0 | rev | cut -d / -f1 | rev)
+
+TMP=${TMP:-/tmp/build}
+LOG=${LOG:-$(dirname $0)/log}
+SRC=${SRC:-$(dirname $0)/src}
+
+NAME=scratchpkg
+
+git clone https://github.com/emmett1/scratchpkg $SRC/scratchpkg
+
+[ "$1" = "fetch" ] && exit 0
+
+rm -fr $TMP
+mkdir -p $TMP $LOG $SRC
+
+{ time \
+   {
+
+	cd $SRC/scratchpkg
+
+	install -m755 revdep pkgadd pkgdel pkgbuild pkgdeplist pkglibdepends scratch /tools/bin
+	install -m644 scratchpkg.conf scratchpkg.repo /tools/etc
+	sed -i 's/master/1.1/g' /tools/etc/scratchpkg.repo
+	
+	# change config path
+	for i in scratch pkgbuild; do
+		sed -i 's:/etc/scratchpkg.conf:/tools/etc/scratchpkg.conf:g' /tools/bin/$i
+	done
+	
+	# change repo path
+	for i in scratch pkgdeplist; do
+		sed -i 's:/etc/scratchpkg.repo:/tools/etc/scratchpkg.repo:g' /tools/bin/$i
+	done
+
+	}
+} 2>&1 | tee $LOG/$filename.log
+    
+[ $PIPESTATUS = 0 ] && echo "$NAME" > /tools/$filename || exit $PIPESTATUS
+
+rm -fr $TMP
