@@ -75,7 +75,7 @@ filesystem
 base
 )
 
-EXTRAPKG=(scratchpkg)
+EXTRAPKG=(rc scratchpkg openssl linux)
 
 adjustingtoolchain() {
 	echo "Adjusting toolchain"
@@ -240,10 +240,10 @@ runinchroot scratch sync || abort 1
 
 for i in ${PKG[@]}; do
 	if [[ -f "$INDEX_DIR/$i/.pkginfo" ]]; then
-		echo "$i is installed"
+		echo ":: $i is installed"
 	else
 		echo
-		echo "Installing $i..."
+		echo ":: Installing $i..."
 		case $i in
 			glibc)
 				ln -sfv /tools/lib/gcc $LFS/usr/lib || abort 1
@@ -289,7 +289,7 @@ EOF
 			gcc)
 				runinchroot scratch build $i || abort 1
 				rm -f $LFS/usr/lib/{libgcc_s.so{,.1},libstdc++.{a,so{,.6}}} || abort 1
-				scratch install -d --no-confirm $i || abort 1
+				runinchroot scratch install -d --no-confirm $i || abort 1
 				;;
 			bash|coreutils|filesystem|scratchpkg)
 				# scratchpkg is hardly depends on bash and coreutils
