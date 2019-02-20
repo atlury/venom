@@ -53,6 +53,7 @@ diffutils
 gawk
 findutils
 groff
+fuse2
 grub
 less
 gzip
