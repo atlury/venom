@@ -4,7 +4,7 @@ This repo contain scripts to bootstrap base system of venom linux. Venom Linux i
 
 You can get prebuilt iso of this distro [here](https://sourceforge.net/projects/venomlinux/) which you can install to your machine if you dont want to bootstrap it yourself. The available iso is base, xorg, lxde, mate and xfce4.
 
-### Bootstrap Benom Linux
+### Bootstrap Venom Linux
 
 Run `./01-toolchain` to build temporary toolchain (multilib). Then run `./02-base` to build base system of Venom Linux. `/mnt/lfs` directory is used to build this distro, so make sure you dont have any important files in this directory before run the script. Use `chroot` script to chroot into Venom Linux base system to configure it by running `./chroot /mnt/lfs`.
 
