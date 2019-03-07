@@ -26,8 +26,25 @@ tar xf $SRC/$tarballname -C $TMP
 
 	cd $TMP/$NAME-$VERSION
 
-	mkdir -v build
-	cd       build
+	mkdir -v build32
+	cd       build32
+	
+	../libstdc++-v3/configure           \
+		--host=$LFS_TGT32               \
+		--prefix=/tools                 \
+		--libdir=/tools/lib32           \
+		--disable-multilib              \
+		--disable-nls                   \
+		--disable-libstdcxx-threads     \
+		--disable-libstdcxx-pch         \
+		--with-gxx-include-dir=/tools/$LFS_TGT/include/c++/$GCC_VER \
+		CC="$LFS_TGT-gcc -m32"          \
+		CXX="$LFS_TGT-g++ -m32"
+	make
+	make install
+
+	mkdir -v ../build
+	cd       ../build
 	
 	../libstdc++-v3/configure           \
 		--host=$LFS_TGT                 \

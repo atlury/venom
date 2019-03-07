@@ -24,9 +24,8 @@ tar xf $SRC/$tarballname -C $TMP
 { time \
    {
 
-	cd $TMP/${NAME}${VERSION}
-
-	cd unix
+	cd $TMP/${NAME}${VERSION}/unix
+	
 	./configure --prefix=/tools
 	make
 	make install

@@ -163,6 +163,12 @@ createdir() {
 	ln -sv /tools/lib/libstdc++.{a,so{,.6}} $LFS/usr/lib
 	ln -sv bash $LFS/bin/sh
 
+	#multilib
+	mkdir -pv $LFS/usr/lib32
+	touch $LFS/usr/lib32/libc.so
+	#ln -sv /tools/lib32/libgcc_s.so{,.1} $LFS/usr/lib32
+	#ln -sv /tools/lib32/libstdc++.{a,so{,.6}} $LFS/usr/lib32
+
 	mkdir -pv $LFS/etc
 	ln -sv /proc/self/mounts $LFS/etc/mtab
 	#echo "nameserver 8.8.8.8" > $LFS/etc/resolv.conf
@@ -249,6 +255,7 @@ for i in ${PKG[@]}; do
 			glibc)
 				ln -sfv /tools/lib/gcc $LFS/usr/lib || abort 1
 				runinchroot scratch build $i || abort 1
+				rm -f $LFS/usr/lib32/libc.so
 				runinchroot scratch install -d --no-confirm $i || abort 1
 				cat > $LFS/tmp/adjusttoolchain << "EOF"
 #!/bin/bash
@@ -273,6 +280,18 @@ grep 'SEARCH.*/usr/lib' dummy.log |sed 's|; |\n|g'
 grep "/lib.*/libc.so.6 " dummy.log
 grep found dummy.log
 rm -v dummy.c a.out dummy.log
+
+if [ -f /usr/lib32/libc.so ]; then
+	cc -m32 dummy.c -v -Wl,--verbose &> dummy.log
+	readelf -l a.out | grep ': /lib'
+
+	grep -o '/usr/lib.*/crt[1in].*succeeded' dummy.log
+	grep -B1 '^ /usr/include' dummy.log
+	grep 'SEARCH.*/usr/lib' dummy.log |sed 's|; |\n|g'
+	grep "/lib.*/libc.so.6 " dummy.log
+	grep found dummy.log
+	rm -v dummy.c a.out dummy.log
+fi
 sleep 5
 EOF
 				chmod +x $LFS/tmp/adjusttoolchain || abort 1
@@ -289,7 +308,8 @@ EOF
 				;;
 			gcc)
 				runinchroot scratch build $i || abort 1
-				rm -f $LFS/usr/lib/{libgcc_s.so{,.1},libstdc++.{a,so{,.6}}} || abort 1
+				rm $LFS/usr/lib/{libgcc_s.so{,.1},libstdc++.{a,so{,.6}}} || abort 1
+				#rm $LFS/usr/lib32/{libgcc_s.so{,.1},libstdc++.{a,so{,.6}}} || abort 1
 				runinchroot scratch install -d --no-confirm $i || abort 1
 				;;
 			bash|coreutils|filesystem|scratchpkg)
@@ -310,6 +330,7 @@ EOF
 				;;
 		esac
 		echo ":: $i installed"
+		#read
 	fi
 done
 

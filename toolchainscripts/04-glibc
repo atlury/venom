@@ -26,8 +26,27 @@ tar xf $SRC/$tarballname -C $TMP
 
 	cd $TMP/$NAME-$VERSION
 
-	mkdir -v build
-	cd       build
+	mkdir -v build32
+	cd       build32
+	
+	echo slibdir=/tools/lib32 > configparms
+	../configure                             \
+		  --prefix=/tools                    \
+		  --host=$LFS_TGT32                  \
+		  --build=$(../scripts/config.guess) \
+		  --libdir=/tools/lib32              \
+		  --enable-kernel=3.2                \
+		  --enable-add-ons                   \
+		  --with-headers=/tools/include      \
+		  libc_cv_forced_unwind=yes          \
+		  libc_cv_c_cleanup=yes              \
+		  CC="$LFS_TGT-gcc -m32"             \
+		  CXX="$LFS_TGT-g++ -m32"
+	make
+	make install
+
+	mkdir -v ../build
+	cd       ../build
 	
 	../configure                             \
 		  --prefix=/tools                    \
@@ -39,6 +58,13 @@ tar xf $SRC/$tarballname -C $TMP
 		  libc_cv_c_cleanup=yes
 	make
 	make install
+	
+	echo 'int main(){}' > dummy.c
+	$LFS_TGT-gcc -m32 dummy.c
+	readelf -l a.out | grep ': /tools'
+	$LFS_TGT-gcc dummy.c
+	readelf -l a.out | grep ': /tools'
+	rm -v dummy.c a.out
 	
 	}
 } 2>&1 | tee $LOG/$filename.log

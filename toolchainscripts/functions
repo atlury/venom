@@ -4,6 +4,7 @@ JOBS=$(nproc)
 export MAKEFLAGS="-j${JOBS}"
 export LFS="/mnt/lfs"
 export LFS_TGT=$(uname -m)-lfs-linux-gnu
+export LFS_TGT32=i686-lfs-linux-gnu
 
 PATH=/tools/bin:/bin:/usr/bin
 
@@ -39,7 +40,7 @@ if [ ! -d $LFS/tools ]; then
 	sudo mkdir -pv $LFS/tools
 fi
 
-if [ ! -w $LFS ]; then
+if [ ! -w $LFS ] || [ ! -w $LFS/tools ]; then
 	sudo chown -Rv $USER:$USER $LFS
 fi
 
