@@ -10,64 +10,64 @@ Run `./01-toolchain` to build temporary toolchain (multilib). Then run `./02-bas
 
 ### Configure Venom Linux (through chroot)
 
-hostname, timezone, clock, font, keymap and daemon:
+* hostname, timezone, clock, font, keymap and daemon:
 
-    # vim /etc/rc.conf
+        # vim /etc/rc.conf
 
-partitions (/, swap and etc):
+* partitions (/, swap and etc):
 
-    # vim /etc/fstab
+        # vim /etc/fstab
     
-locales:
+* locales:
 
-    # vim /etc/locales
-    # genlocales
+        # vim /etc/locales
+        # genlocales
 
-root password:
+* root password:
 
-    # passwd
+        # passwd
     
-add user:
+* add user:
 
-    # useradd -m -G users,wheel,audio,video -s /bin/bash <your user>
-    # passwd <your user>
+        # useradd -m -G users,wheel,audio,video -s /bin/bash <your user>
+        # passwd <your user>
     
-install grub:
+* install grub:
 
-    # grub-install /dev/sdX
-    # grub-mkconfig -o /boot/grub/grub.cfg
+        # grub-install /dev/sdX
+        # grub-mkconfig -o /boot/grub/grub.cfg
     
 ### Package manager
 
 This distro come with custom package manager called [scratchpkg](https://github.com/emmett1/scratchpkg). This some basic command of this package manager that you should know:
 
-installing packages:
+* installing packages:
 
-    # scratch install <pkg1> <pkg2> <pkgN>
+        # scratch install <pkg1> <pkg2> <pkgN>
     
-removing packages:
+* removing packages:
 
-    # scratch remove <pkg1> <pkg2> <pkgN>
+        # scratch remove <pkg1> <pkg2> <pkgN>
     
-search packages:
+* search packages:
 
-    # scratch search <pattern>
+        # scratch search <pattern>
     
-update packages repo:
+* update packages repo:
 
-    # scratch sync
+        # scratch sync
     
-full system upgrade (should run after updating packages repo):
+* full system upgrade (should run after updating packages repo):
 
-    # scratch sysup
+        # scratch sysup
 
-fix broken packages (recommended run after full system upgrade or after removing packages):
+* fix broken packages (recommended run after full system upgrade or after removing packages):
 
-    # revdep -r
+        # revdep -r
     
-update packages configuration files (recommended run after packages upgraded):
+* update packages configuration files (recommended run after packages upgraded):
 
-    # updateconf
+        # updateconf
     
 ### Notes
 
