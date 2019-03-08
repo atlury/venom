@@ -10,12 +10,10 @@ LOG=${LOG:-$(dirname $0)/log}
 SRC=${SRC:-$(dirname $0)/src}
 
 NAME=scratchpkg
+VERSION=20190218
+_commit=a150749dcbd3bdd9c45e13d3fe6e0c97a4221d69
 
-if [ -d $SRC/scratchpkg ]; then
-	(cd $SRC/scratchpkg && git pull)
-else
-	git clone https://github.com/emmett1/scratchpkg $SRC/scratchpkg
-fi
+fetch "https://github.com/emmett1/scratchpkg/archive/$_commit.tar.gz" $SRC
 
 [ "$1" = "fetch" ] && exit 0
 
@@ -44,6 +42,6 @@ mkdir -p $TMP $LOG $SRC
 	}
 } 2>&1 | tee $LOG/$filename.log
     
-[ $PIPESTATUS = 0 ] && echo "$NAME" > /tools/$filename || exit $PIPESTATUS
+[ $PIPESTATUS = 0 ] && echo "$NAME-$VERSION" > /tools/$filename || exit $PIPESTATUS
 
 rm -fr $TMP
