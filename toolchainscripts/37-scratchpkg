@@ -29,7 +29,6 @@ tar xf $SRC/$tarballname -C $TMP
 
 	install -m755 revdep pkgadd pkgdel pkgbuild pkgdeplist pkglibdepends scratch /tools/bin
 	install -m644 scratchpkg.conf scratchpkg.repo /tools/etc
-	sed -i 's/master/1.1/g' /tools/etc/scratchpkg.repo
 	
 	# change config path
 	for i in scratch pkgbuild; do

@@ -166,8 +166,6 @@ createdir() {
 	#multilib
 	mkdir -pv $LFS/usr/lib32
 	touch $LFS/usr/lib32/libc.so
-	#ln -sv /tools/lib32/libgcc_s.so{,.1} $LFS/usr/lib32
-	#ln -sv /tools/lib32/libstdc++.{a,so{,.6}} $LFS/usr/lib32
 
 	mkdir -pv $LFS/etc
 	ln -sv /proc/self/mounts $LFS/etc/mtab
