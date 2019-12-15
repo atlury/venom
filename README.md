@@ -2,7 +2,7 @@
 
 This repo contain scripts to bootstrap base system of venom linux. Venom Linux is distro inspired by [CRUX](https://crux.nu) but based on [LFS](http://www.linuxfromscratch.org/lfs/) and [BLFS](http://www.linuxfromscratch.org/blfs/) with multilib enabled targetting experienced users. Venom Linux use 'KISS' philosophy for packages. It use BSD-style init and BSD-like port system for packages. 
 
-You can get prebuilt iso of this distro [here](https://sourceforge.net/projects/venomlinux/) which you can install to your machine if you dont want to bootstrap it yourself. The available iso is base, xorg, lxde, mate and xfce4.
+You can get prebuilt iso of this distro [here](https://sourceforge.net/projects/venomlinux/) which you can install to your machine if you dont want to bootstrap it yourself. The available iso is base, xorg, lxde, lxqt, mate and xfce4.
 
 ### Bootstrap Venom Linux
 
